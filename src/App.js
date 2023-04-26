@@ -1,6 +1,6 @@
 
 //App.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import AddProduct from "./AddProduct";
 import Product from "./Product";
@@ -10,7 +10,7 @@ import { loadProducts, saveProducts, loadStoreName, saveStoreName } from "./loca
 
 function App() {
   const dispatch = useDispatch();
-  const products = loadProducts();
+  const initialProducts = loadProducts();
   const [tab, setTab] = useState("products");
 
   // Add store name state and load it from localStorage
@@ -28,6 +28,20 @@ function App() {
   const toggleEditingStoreName = () => {
     setEditingStoreName(!editingStoreName);
   };
+  
+  // Use useState for products and useSelector to get updated products from the Redux store
+  const [products, setProducts] = useState(initialProducts);
+  const updatedProducts = useSelector((state) => state.products);
+
+  // Sync the products state with the updatedProducts from the Redux store
+  useEffect(() => {
+    setProducts(updatedProducts);
+  }, [updatedProducts]);
+
+  // Use useEffect to dispatch the action to load initial products from localStorage
+  useEffect(() => {
+    dispatch({ type: "LOAD_PRODUCTS", payload: initialProducts });
+  }, [dispatch, initialProducts]);
 
 
   // Handle adding a new product
