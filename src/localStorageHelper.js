@@ -1,3 +1,5 @@
+//localStorageHelper.js
+
 const LOCAL_STORAGE_KEY = 'products';
 
 export function saveProducts(products) {
@@ -9,8 +11,6 @@ export function loadProducts() {
   return productsJson ? JSON.parse(productsJson) : [];
 }
 
-// localStorageHelper.js
-// ...
 export function getSalesHistory() {
   const salesHistory = localStorage.getItem("salesHistory");
   return salesHistory ? JSON.parse(salesHistory) : [];
