@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 
 const PaymentForm = ({ onPaymentSubmit }) => {
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(0.0);
   const denominations = [1, 5, 10, 20, 50, 100, 200, 500, 1000];
 
   const handleSubmit = (e) => {

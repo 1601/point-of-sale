@@ -11,18 +11,14 @@ export function loadProducts() {
   return productsJson ? JSON.parse(productsJson) : [];
 }
 
-export function getSalesHistory() {
-  const salesHistory = localStorage.getItem("salesHistory");
-  return salesHistory ? JSON.parse(salesHistory) : [];
-}
+const SALES_HISTORY_KEY = "sales_history";
 
-export function addSale(items) {
-  const salesHistory = getSalesHistory();
-  const sale = {
-    date: new Date().toLocaleString(),
-    items: [...items],
-  };
-
+export const addSale = (sale) => {
+  let salesHistory = JSON.parse(localStorage.getItem(SALES_HISTORY_KEY) || "[]");
   salesHistory.push(sale);
-  localStorage.setItem("salesHistory", JSON.stringify(salesHistory));
-}
+  localStorage.setItem(SALES_HISTORY_KEY, JSON.stringify(salesHistory));
+};
+
+export const getSalesHistory = () => {
+  return JSON.parse(localStorage.getItem(SALES_HISTORY_KEY) || "[]");
+};

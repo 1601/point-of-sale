@@ -1,3 +1,4 @@
+//AddProductForm.js
 import React, { useState } from 'react';
 
 const AddProductForm = ({ onAddProduct }) => {

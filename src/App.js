@@ -68,7 +68,8 @@ function App() {
       <div className="tab-content">
         {tab === "products" && (
           <>
-            <AddProduct onAddProduct={handleAddProduct} />
+            {/* <AddProduct onAddProduct={handleAddProduct} />  */}
+            <AddProduct />
             {products.map((product) => (
               <Product key={product.id} product={product} onRemoveProduct={handleRemoveProduct} />
             ))}
