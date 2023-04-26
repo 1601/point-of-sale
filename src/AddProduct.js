@@ -1,64 +1,70 @@
 // AddProduct.js
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { nanoid } from "nanoid";
 
-const AddProduct = ({ onAddProduct }) => {
+const AddProduct = () => {
+  const dispatch = useDispatch();
+
   const [name, setName] = useState("");
   const [fullPrice, setFullPrice] = useState(0);
 
-  const handleSubmit = (e) => {
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+  };
+
+  const handleFullPriceChange = (e) => {
+    setFullPrice(parseFloat(e.target.value));
+  };
+
+  const handleAddProduct = (e) => {
     e.preventDefault();
 
-    if (!name || fullPrice <= 0) {
-      alert("Please provide a valid product name and full price.");
-      return;
-    }
-
-    onAddProduct({
-      id: Date.now(),
+    const newProduct = {
+      id: nanoid(),
       name,
       fullPrice,
-      halfPrice: fullPrice / 2,
-    });
+    };
+
+    dispatch({ type: "ADD_PRODUCT", payload: newProduct });
 
     setName("");
     setFullPrice(0);
   };
 
-  const denominations = [1, 5, 10, 20, 50, 100, 500, 1000];
+  const handleDenominationClick = (amount) => {
+    setFullPrice((prevPrice) => prevPrice + amount);
+  };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Product Name:
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-      </label>
-      <label>
-        Full Price:
-        <input
-          type="number"
-          value={fullPrice}
-          onChange={(e) => setFullPrice(parseFloat(e.target.value))}
-          required
-        />
-      </label>
-      <div className="denominations">
-        {denominations.map((denomination) => (
-          <button
-            key={denomination}
-            type="button"
-            onClick={() => setFullPrice(fullPrice + denomination)}
-          >
-            +₱{denomination}
-          </button>
-        ))}
-      </div>
-      <button type="submit">Add Product</button>
-    </form>
+    <div className="add-product">
+      <h3>Add Product</h3>
+      <form onSubmit={handleAddProduct}>
+        <label>
+          Name:
+          <input type="text" value={name} onChange={handleNameChange} />
+        </label>
+        <label>
+          Full Price (PHP):
+          <div className="denominations">
+            <button onClick={() => handleDenominationClick(10)}>₱10</button>
+            <button onClick={() => handleDenominationClick(20)}>₱20</button>
+            <button onClick={() => handleDenominationClick(50)}>₱50</button>
+            <button onClick={() => handleDenominationClick(100)}>₱100</button>
+            <button onClick={() => handleDenominationClick(200)}>₱200</button>
+            <button onClick={() => handleDenominationClick(500)}>₱500</button>
+          </div>
+          <input
+            type="number"
+            min="0"
+            step="0.01"
+            value={fullPrice}
+            onChange={handleFullPriceChange}
+          />
+        </label>
+        <button type="submit">Add Product</button>
+      </form>
+    </div>
   );
 };
 

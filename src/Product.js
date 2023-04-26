@@ -9,10 +9,10 @@ const Product = ({ product, onRemoveProduct }) => {
     <div className="product">
       <h4>{product.name}</h4>
       <p>
-        Full price: ₱{product.fullPrice.toLocaleString("en-PH", { minimumFractionDigits: 2 })}
+        Full price: {product.fullPrice ? `₱${product.fullPrice.toLocaleString("en-PH", { minimumFractionDigits: 2 })}` : "N/A"}
       </p>
       <p>
-        Half price: ₱{product.halfPrice.toLocaleString("en-PH", { minimumFractionDigits: 2 })}
+        Half price: {product.halfPrice ? `₱${product.halfPrice.toLocaleString("en-PH", { minimumFractionDigits: 2 })}` : "N/A"}
       </p>
       <button onClick={() => dispatch({ type: "ADD_ITEM", payload: product })}>
         Add to Sale

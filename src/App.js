@@ -1,63 +1,7 @@
-// // App.js
-// import React, { useState } from "react";
-// import AddProductForm from "./AddProductForm";
-// import ProductsList from "./ProductsList";
-// import PaymentForm from "./PaymentForm";
-// import Receipt from "./Receipt";
-// import TabNavigation from "./TabNavigation";
-// import { useSelector, useDispatch } from "react-redux";
-// import { addSale } from "./localStorageHelper";
-// import SalesHistory from "./SalesHistory";
-
-// function App() {
-//   const [activeTab, setActiveTab] = useState("Products");
-//   const items = useSelector((state) => state.items);
-//   const paid = useSelector((state) => state.paid);
-//   const total = useSelector((state) => state.total);
-//   const change = useSelector((state) => state.change);
-//   const dispatch = useDispatch();
-
-//   const handlePaymentSubmit = (amount) => {
-//     if (total <= amount) {
-//       addSale(items);
-//       dispatch({ type: "PROCESS_PAYMENT", payload: amount });
-//     } else {
-//       alert("Amount paid is not enough.");
-//     }
-//   };
-
-//   const tabsContent = {
-//     Products: (
-//       <>
-//         <AddProductForm />
-//         <ProductsList />
-//       </>
-//     ),
-//     Sales: (
-//       <>
-//         <PaymentForm onPaymentSubmit={handlePaymentSubmit} />
-//         <Receipt items={items} paid={paid} total={total} change={change} />
-//       </>
-//     ),
-//     History: <SalesHistory />,
-//   };
-
-//   return (
-//     <div className="App">
-//       <TabNavigation
-//         tabs={["Products", "Sales", "History"]}
-//         activeTab={activeTab}
-//         setActiveTab={setActiveTab}
-//       />
-//       {tabsContent[activeTab]}
-//     </div>
-//   );
-// }
-
-// export default App;
 // App.js
 import React, { useState } from "react";
 import "./App.css";
+import { useSelector, useDispatch } from "react-redux";
 import AddProduct from "./AddProduct";
 import Product from "./Product";
 import ProductsList from "./ProductsList";
@@ -66,6 +10,13 @@ import SalesHistory from "./SalesHistory";
 
 function App() {
   const [tab, setTab] = useState("products");
+
+  const products = useSelector((state) => state.products);
+  const dispatch = useDispatch();
+
+  const handleRemoveProduct = (id) => {
+    dispatch({ type: "REMOVE_PRODUCT", payload: id });
+  };
 
   return (
     <div className="App">
