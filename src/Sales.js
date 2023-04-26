@@ -10,16 +10,18 @@ const Sales = () => {
   const products = useSelector((state) => state.products);
   const dispatch = useDispatch();
 
-  const handleAddItem = (product) => {
-    dispatch({ type: "ADD_ITEM", payload: product });
+  const denominations = [1, 5, 10, 20, 50, 100, 200, 500, 1000];
+
+  const handleAddItem = (product, priceType) => {
+    dispatch({ type: "ADD_ITEM", payload: { ...product, priceType } });
   };
 
   const handleResetItems = () => {
     dispatch({ type: "RESET_ITEMS" });
   };
 
-  const handlePaidChange = (e) => {
-    setPaid(parseFloat(e.target.value));
+  const handlePaidChange = (value) => {
+    setPaid((prevPaid) => prevPaid + value);
   };
 
   const handleCompleteSale = () => {
@@ -45,7 +47,8 @@ const Sales = () => {
   const getTotal = () => {
     return items.reduce((total, item) => {
       const product = products.find((p) => p.id === item.id);
-      return total + (item.quantity * product.halfPrice);
+      const price = item.priceType === "full" ? product.fullPrice : product.halfPrice;
+      return total + price;
     }, 0);
   };
 
@@ -54,9 +57,17 @@ const Sales = () => {
       <h3>Sales</h3>
       <div className="items">
         {products.map((product) => (
-          <button key={product.id} onClick={() => handleAddItem(product)}>
-            {product.name} - ₱{product.halfPrice.toLocaleString("en-PH", { minimumFractionDigits: 2 })}
-          </button>
+          <React.Fragment key={product.id}>
+            <div style={{border : "1px solid black"}}>
+              <h1>{product.name} </h1>
+              <button onClick={() => handleAddItem(product, "full")}>
+               (Full) - ₱{product.fullPrice.toLocaleString("en-PH", { minimumFractionDigits: 2 })}
+              </button>
+              <button onClick={() => handleAddItem(product, "half")}>
+               (Half) - ₱{product.halfPrice.toLocaleString("en-PH", { minimumFractionDigits: 2 })}
+              </button>
+            </div>
+          </React.Fragment>
         ))}
       </div>
       <Receipt
@@ -66,15 +77,15 @@ const Sales = () => {
         change={paid - getTotal()}
       />
       <div className="actions">
+        <div>
+          {denominations.map((denomination) => (
+            <button key={denomination} onClick={() => handlePaidChange(denomination)}>
+              +₱{denomination}
+            </button>
+          ))}
+        </div>
         <label>
-          Paid:
-          <input
-            type="number"
-            min="0"
-            step="0.01"
-            value={paid}
-            onChange={handlePaidChange}
-          />
+          Paid: ₱{paid.toLocaleString("en-PH", { minimumFractionDigits: 2 })}
         </label>
         <button type="button" onClick={handleCompleteSale}>
           Complete Sale

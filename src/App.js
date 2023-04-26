@@ -10,21 +10,9 @@ import { loadProducts, saveProducts } from "./localStorageHelper"; // import the
 
 function App() {
   const dispatch = useDispatch();
-  const products = useSelector((state) => state.products);
+  const products = loadProducts();
   const [tab, setTab] = useState("products");
-  
-  React.useEffect(() => {
-    loadProducts();
-  }, []);
-  
 
-  // Load the products from localStorage on app startup
-  React.useEffect(() => {
-    const savedProducts = loadProducts();
-    if (savedProducts.length > 0) {
-      dispatch({ type: "SET_PRODUCTS", payload: savedProducts });
-    }
-  }, [dispatch]);
 
   // Handle adding a new product
   const handleAddProduct = (newProduct) => {
@@ -52,7 +40,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Point of Sale</h1>
+        <h1>Ate Rose Tindahan</h1>
       </header>
       <div className="tabs">
         <button className={tab === "products" ? "active" : ""} onClick={() => handleTabSelect("products")}>
@@ -62,19 +50,18 @@ function App() {
           Sales
         </button>
         <button className={tab === "history" ? "active" : ""} onClick={() => handleTabSelect("history")}>
-          SalesHistory
+          History
         </button>
       </div>
       <div className="tab-content">
-        {tab === "products" && (
-          <>
-            {/* <AddProduct onAddProduct={handleAddProduct} />  */}
-            <AddProduct />
-            {products.map((product) => (
-              <Product key={product.id} product={product} onRemoveProduct={handleRemoveProduct} />
-            ))}
-          </>
-        )}
+      {tab === "products" && (
+        <>
+          <AddProduct onAddProduct={handleAddProduct} />
+          {products.map((product) => (
+            <Product key={product.id} product={product} onRemoveProduct={handleRemoveProduct} />
+          ))}
+        </>
+      )}
         {tab === "sales" && <Sales />}
         {tab === "history" && <SalesHistory />}
       </div>
