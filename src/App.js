@@ -6,12 +6,28 @@ import AddProduct from "./AddProduct";
 import Product from "./Product";
 import Sales from "./Sales";
 import SalesHistory from "./SalesHistory";
-import { loadProducts, saveProducts } from "./localStorageHelper"; // import the functions
+import { loadProducts, saveProducts, loadStoreName, saveStoreName } from "./localStorageHelper";
 
 function App() {
   const dispatch = useDispatch();
   const products = loadProducts();
   const [tab, setTab] = useState("products");
+
+  // Add store name state and load it from localStorage
+  const [storeName, setStoreName] = useState(loadStoreName());
+  const [editingStoreName, setEditingStoreName] = useState(false);
+
+  // Handle changing the store name
+  const handleStoreNameChange = (event) => {
+    const newStoreName = event.target.value;
+    setStoreName(newStoreName);
+    saveStoreName(newStoreName);
+  };
+
+  // Toggle editing store name
+  const toggleEditingStoreName = () => {
+    setEditingStoreName(!editingStoreName);
+  };
 
 
   // Handle adding a new product
@@ -40,7 +56,23 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Ate Rose Tindahan</h1>
+        {editingStoreName ? (
+          <>
+            <input
+              type="text"
+              value={storeName}
+              onChange={handleStoreNameChange}
+              className="store-name-input"
+              onBlur={toggleEditingStoreName}
+            />
+            <button onClick={toggleEditingStoreName}>Done</button>
+          </>
+        ) : (
+          <>
+            <h1>{storeName} <button onClick={toggleEditingStoreName}>Edit</button></h1>
+            
+          </>
+        )}
       </header>
       <div className="tabs">
         <button className={tab === "products" ? "active" : ""} onClick={() => handleTabSelect("products")}>
