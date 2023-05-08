@@ -22,7 +22,11 @@ function products(state = initialState.products, action) {
 function items(state = initialState.items, action) {
   switch (action.type) {
     case "ADD_ITEM":
-      const existingItemIndex = state.findIndex((item) => item.id === action.payload.id);
+      // const existingItemIndex = state.findIndex((item) => item.id === action.payload.id);
+      const existingItemIndex = state.findIndex(
+        (item) => item.id === action.payload.id && item.priceType === action.payload.priceType
+      );
+      
 
       if (existingItemIndex !== -1) {
         const newState = [...state];
