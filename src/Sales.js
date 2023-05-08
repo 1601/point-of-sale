@@ -24,6 +24,10 @@ const Sales = () => {
     setPaid((prevPaid) => prevPaid + value);
   };
 
+  const handleResetPaid = () => {
+    setPaid(0);
+  };
+
   const handleCompleteSale = () => {
     if (paid < getTotal()) {
       alert("Paid amount is less than the total amount. Please provide the correct amount.");
@@ -46,11 +50,13 @@ const Sales = () => {
 
   const getTotal = () => {
     return items.reduce((total, item) => {
+      console.log(item)
       const product = products.find((p) => p.id === item.id);
       const price = item.priceType === "full" ? product.fullPrice : product.halfPrice;
-      return total + price;
+      return total + price * item.quantity;
     }, 0);
   };
+  
 
   return (
     <div className="sales">
@@ -87,6 +93,13 @@ const Sales = () => {
         <label>
           Paid: ₱{paid.toLocaleString("en-PH", { minimumFractionDigits: 2 })}
         </label>
+        <button type="button" onClick={handleResetPaid}>
+          Reset
+        </button>
+        <button type="button" onClick={handleResetItems}>
+          Reset All
+        </button>
+        <br/>
         <button type="button" onClick={handleCompleteSale}>
           Complete Sale
         </button>
