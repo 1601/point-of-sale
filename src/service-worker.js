@@ -13,7 +13,7 @@ const urlsToCache = [
   '/static/js/*.chunk.js',
 ];
 
-self.addEventListener('install', (event) => {
+navigator.serviceWorker.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       console.log('Opened cache');
@@ -22,7 +22,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-self.addEventListener('fetch', (event) => {
+navigator.serviceWorker.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
       if (response) {
@@ -33,7 +33,7 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-self.addEventListener('activate', (event) => {
+navigator.serviceWorker.addEventListener('activate', (event) => {
   const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
     caches.keys().then((cacheNames) => {
